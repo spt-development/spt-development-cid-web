@@ -1,0 +1,30 @@
+<FindBugsFilter>
+    <!--
+         There is no recommendation either way any more between static and instance variables:
+         https://www.slf4j.org/faq.html#declared_static, so in general static is fine as is generally the approach
+         people take.
+      -->
+    <Match>
+        <Bug pattern="SLF4J_LOGGER_SHOULD_BE_NON_STATIC" />
+    </Match>
+
+    <!-- Should be resolved by client applications replacing \r\n in log message config -->
+    <Match>
+        <Bug pattern="CRLF_INJECTION_LOGS" />
+    </Match>
+
+    <!--
+         The headers are being sanitized, however SpotBugs doesn't realise because Pattern::replaceAll is being
+         used, rather than String::replaceAll (which is less efficient)
+      -->
+    <Match>
+        <Class name="com.spt.development.cid.web.filter.CorrelationIdFilter" />
+        <Bug pattern="HTTP_RESPONSE_SPLITTING" />
+    </Match>
+
+    <!-- Low risk and a feature we want to include, header value is only used for information i.e. the correlation ID -->
+    <Match>
+        <Class name="com.spt.development.cid.web.filter.CorrelationIdFilter" />
+        <Bug pattern="SERVLET_HEADER" />
+    </Match>
+</FindBugsFilter>
