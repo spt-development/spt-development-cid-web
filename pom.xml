@@ -4,7 +4,7 @@
 
     <groupId>com.spt-development</groupId>
     <artifactId>spt-development-cid-web</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <name>cid-web</name>
     <description>A simple library for initialising the correlation ID associated with incoming web requests.</description>
@@ -33,7 +33,7 @@
         <maven.compiler.target>15</maven.compiler.target>
 
         <!-- Dependency versions -->
-        <spt-cid.version>1.0.0</spt-cid.version>
+        <spt-cid.version>1.1.0</spt-cid.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
         <slf4j.version>1.7.30</slf4j.version>
 
