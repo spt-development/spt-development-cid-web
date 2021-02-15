@@ -33,6 +33,10 @@ example, in a Spring based project register as a bean.
         return filterRegBean;
     }
 
+Alternatively, if you are integrating the library into a Spring Boot project, add the
+[spt-development/spt-development-cid-web-spring-boot](https://github.com/spt-development/spt-development-cid-web-spring-boot)
+starter to your project's pom.
+
 Building locally
 ================
 
