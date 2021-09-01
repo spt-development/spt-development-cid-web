@@ -12,5 +12,17 @@
     </ignoreVersions>
 
     <rules>
+        <rule groupId="jakarta.servlet" artifactId="jakarta.servlet-api" comparisonMethod="maven">
+            <ignoreVersions>
+                <ignoreVersion type="regex">.*</ignoreVersion>
+            </ignoreVersions>
+        </rule>
+
+        <!-- Test dependencies aligned with Spring Boot -->
+        <rule groupId="org.mockito" artifactId="mockito-core" comparisonMethod="maven">
+            <ignoreVersions>
+                <ignoreVersion type="regex">.*</ignoreVersion>
+            </ignoreVersions>
+        </rule>
     </rules>
 </ruleset>
