@@ -1,7 +1,7 @@
 language: java
 
 jdk:
-  - openjdk17
+  - openjdk18
 
 # Need a full git clone in order to be able to tag the release
 git:
@@ -10,7 +10,7 @@ git:
 install:
   - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
   - cd $TRAVIS_REPO_SLUG
-  - git checkout $TRAVIS_BRANCH
+  - git checkout ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
   - POM_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec | sed -e 's/-SNAPSHOT//')
   - openssl aes-256-cbc -K $encrypted_044baa266d1a_key -iv $encrypted_044baa266d1a_iv -in .travis/gpg.asc.enc -out .travis/gpg.asc -d
   - gpg --fast-import .travis/gpg.asc
