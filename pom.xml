@@ -341,7 +341,7 @@
                 <version>${maven-release-plugin.version}</version>
                 <configuration>
                     <goals>deploy</goals>
-                    <scmCommentPrefix>[skip travis] [maven-release-plugin] </scmCommentPrefix>
+                    <scmCommentPrefix>[skip ci] [maven-release-plugin] </scmCommentPrefix>
                     <tagNameFormat>@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
