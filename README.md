@@ -8,7 +8,7 @@
  cid-web-------------------------------------------------------------------------
 ````
 
-[![build_status](https://travis-ci.com/spt-development/spt-development-cid-web.svg?branch=main)](https://travis-ci.com/spt-development/spt-development-cid-web)
+[![build_status](https://github.com/spt-development/spt-development-cid-web/actions/workflows/build.yml/badge.svg)](https://github.com/spt-development/spt-development-cid-web/actions)
 
 Library for integrating [spt-development/spt-development-cid](https://github.com/spt-development/spt-development-cid)
 into a web project.
@@ -47,9 +47,4 @@ To build the library, run the following maven command:
 Release
 =======
 
-To build a release and upload to Maven Central run the following maven command:
-
-    $ export GPG_TTY=$(tty) # Required on Mac OS X
-    $ mvn deploy -DskipTests -Prelease
-
-NOTE. This is currently a manual step as not currently integrated into the build.
+To build a release and upload to Maven Central push to `main`.
