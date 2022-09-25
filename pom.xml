@@ -233,6 +233,14 @@
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>${spotbugs.version}</version>
+                <dependencies>
+                    <!-- Overriding the default analyzer version, to support JDK 19 -->
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                        <version>${asm.version}</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Low</threshold>
