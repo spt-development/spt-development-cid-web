@@ -16,8 +16,8 @@ into a web project.
 Usage
 =====
 
-Register the filter to initialise the correlation ID for each incoming request and return as a response header. For 
-example, in a Spring based project register as a bean.
+Register the `CorrelationIdFilter` to initialise the correlation ID for each incoming request and return as a response 
+header. For example, in a Spring based project register as a bean.
 
     @Bean
     public FilterRegistrationBean<CorrelationIdFilter> correlationIdFilter() {
@@ -28,6 +28,21 @@ example, in a Spring based project register as a bean.
         );
 
         filterRegBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        filterRegBean.addUrlPatterns("/api/v1.0/*");
+
+        return filterRegBean;
+    }
+
+Register the `MdcCorrelationIdFilter` to add the correlation ID to the [MDC](https://logback.qos.ch/manual/mdc.html);
+
+    @Bean
+    public FilterRegistrationBean<MdcCorrelationIdFilter> mdcCorrelationIdFilter(@Value("${spt.cid.mdc.cid-key:#{null}}") String mdcCidKey) {
+        final FilterRegistrationBean<MdcCorrelationIdFilter> filterRegBean = new FilterRegistrationBean<>(
+                new MdcCorrelationIdFilter()
+        );
+
+        // This bean must be registed after the CorrelationIdFilter.
+        filterRegBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
         filterRegBean.addUrlPatterns("/api/v1.0/*");
 
         return filterRegBean;
