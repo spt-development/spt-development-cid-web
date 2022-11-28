@@ -1,15 +1,14 @@
 package com.spt.development.cid.web.filter;
 
 import com.spt.development.cid.CorrelationId;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.slf4j.MDC;
-
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import static com.spt.development.cid.web.filter.MdcCorrelationIdFilter.MDC_CID_KEY;
 import static org.hamcrest.CoreMatchers.is;
