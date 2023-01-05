@@ -36,7 +36,7 @@
 
         <!-- Dependency versions, matched to Spring Boot -->
         <jakarta-servlet.version>6.0.0</jakarta-servlet.version>
-        <slf4j.version>2.0.4</slf4j.version>
+        <slf4j.version>2.0.6</slf4j.version>
 
         <!-- Test dependency versions, matched to Spring Boot -->
         <hamcrest.version>2.2</hamcrest.version>
