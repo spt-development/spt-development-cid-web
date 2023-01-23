@@ -40,7 +40,7 @@
 
         <!-- Test dependency versions, matched to Spring Boot -->
         <hamcrest.version>2.2</hamcrest.version>
-        <junit-jupiter.version>5.9.1</junit-jupiter.version>
+        <junit-jupiter.version>5.9.2</junit-jupiter.version>
         <logback.version>1.4.5</logback.version>
         <mockito.version>4.8.1</mockito.version>
 
