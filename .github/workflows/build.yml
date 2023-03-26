@@ -9,11 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up JDK 19
+      - name: Set up JDK 20
         uses: oracle-actions/setup-java@v1
         with:
           website: jdk.java.net
-          release: 19
+          release: 20
 
       - name: Build with Maven
         run: mvn clean install -B
@@ -29,11 +29,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up JDK 19
+      - name: Set up JDK 20
         uses: oracle-actions/setup-java@v1
         with:
           website: jdk.java.net
-          release: 19
+          release: 20
           
       - name: Determine version
         run: echo "POM_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec | sed -e 's/-SNAPSHOT//')" >> $GITHUB_ENV
@@ -61,22 +61,9 @@ jobs:
 
       - name: Create GitHub release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ env.POM_VERSION }}
-          release_name: ${{ env.POM_VERSION }}
-          draft: false
-          prerelease: false
-
-      - name: Upload GitHub release asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: target/spt-development-cid-web-${{ env.POM_VERSION }}.jar
-          asset_name: spt-development-cid-web-${{ env.POM_VERSION }}.jar
-          asset_content_type: application/java-archive
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.POM_VERSION }}
+          artifacts: target/spt-development-cid-web-${{ env.POM_VERSION }}.jar
+          artifactContentType: application/java-archive
