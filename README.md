@@ -19,34 +19,38 @@ Usage
 Register the `CorrelationIdFilter` to initialise the correlation ID for each incoming request and return as a response 
 header. For example, in a Spring based project register as a bean.
 
-    @Bean
-    public FilterRegistrationBean<CorrelationIdFilter> correlationIdFilter() {
-        final FilterRegistrationBean<CorrelationIdFilter> filterRegBean = new FilterRegistrationBean<>(
-                // Constructor overloads allow the overiding of the correlation ID header and whether to use the 
-                // request correlation ID header (if it exists) to initialise the correlation ID.
-                new CorrelationIdFilter()
-        );
+```java
+@Bean
+public FilterRegistrationBean<CorrelationIdFilter> correlationIdFilter() {
+    final FilterRegistrationBean<CorrelationIdFilter> filterRegBean = new FilterRegistrationBean<>(
+            // Constructor overloads allow the overiding of the correlation ID header and whether to use the 
+            // request correlation ID header (if it exists) to initialise the correlation ID.
+            new CorrelationIdFilter()
+    );
 
-        filterRegBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        filterRegBean.addUrlPatterns("/api/v1.0/*");
+    filterRegBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    filterRegBean.addUrlPatterns("/api/v1.0/*");
 
-        return filterRegBean;
-    }
+    return filterRegBean;
+}
+```
 
 Register the `MdcCorrelationIdFilter` to add the correlation ID to the [MDC](https://logback.qos.ch/manual/mdc.html);
 
-    @Bean
-    public FilterRegistrationBean<MdcCorrelationIdFilter> mdcCorrelationIdFilter(@Value("${spt.cid.mdc.cid-key:#{null}}") String mdcCidKey) {
-        final FilterRegistrationBean<MdcCorrelationIdFilter> filterRegBean = new FilterRegistrationBean<>(
-                new MdcCorrelationIdFilter()
-        );
+```java
+@Bean
+public FilterRegistrationBean<MdcCorrelationIdFilter> mdcCorrelationIdFilter(@Value("${spt.cid.mdc.cid-key:#{null}}") String mdcCidKey) {
+    final FilterRegistrationBean<MdcCorrelationIdFilter> filterRegBean = new FilterRegistrationBean<>(
+            new MdcCorrelationIdFilter()
+    );
 
-        // This bean must be registed after the CorrelationIdFilter.
-        filterRegBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
-        filterRegBean.addUrlPatterns("/api/v1.0/*");
+    // This bean must be registed after the CorrelationIdFilter.
+    filterRegBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
+    filterRegBean.addUrlPatterns("/api/v1.0/*");
 
-        return filterRegBean;
-    }
+    return filterRegBean;
+}
+```
 
 Alternatively, if you are integrating the library into a Spring Boot project, add the
 [spt-development/spt-development-cid-web-spring-boot](https://github.com/spt-development/spt-development-cid-web-spring-boot)
@@ -57,7 +61,9 @@ Building locally
 
 To build the library, run the following maven command:
 
-    $ mvn clean install
+```shell
+$ mvn clean install
+```
 
 Release
 =======
