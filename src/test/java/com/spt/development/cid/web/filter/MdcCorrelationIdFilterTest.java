@@ -14,14 +14,15 @@ import static com.spt.development.cid.web.filter.MdcCorrelationIdFilter.MDC_CID_
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 class MdcCorrelationIdFilterTest {
-    private interface TestData {
-        String CORRELATION_ID = "30fc1a7c-8fcf-4c10-bc59-094cee91c386";
+    private static class TestData {
+        static final String CORRELATION_ID = "30fc1a7c-8fcf-4c10-bc59-094cee91c386";
 
-        String ALT_MDC_CID_KEY = "test-correlation-id";
+        static final String ALT_MDC_CID_KEY = "test-correlation-id";
     }
 
     @BeforeEach
@@ -66,8 +67,10 @@ class MdcCorrelationIdFilterTest {
 
     @Test
     void destroy_happyPath_doesNothing() {
+        final MdcCorrelationIdFilter target = createDefaultFilter();
+
         // Just added for coverage :O(
-        createDefaultFilter().destroy();
+        assertDoesNotThrow(target::destroy);
     }
 
     private MdcCorrelationIdFilter createDefaultFilter() {

@@ -48,7 +48,7 @@ public class MdcCorrelationIdFilter implements Filter {
                          final ServletResponse servletResponse,
                          final FilterChain filterChain) throws IOException, ServletException {
 
-        try (final MDC.MDCCloseable mdc = MDC.putCloseable(cidKey, CorrelationId.get())) {
+        try (MDC.MDCCloseable mdc = MDC.putCloseable(cidKey, CorrelationId.get())) {
             assert mdc != null;
 
             filterChain.doFilter(servletRequest, servletResponse);

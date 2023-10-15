@@ -14,16 +14,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class CorrelationIdFilterTest {
-    private interface TestData {
-        String CORRELATION_ID = "b7700d43-35cd-4898-889f-998e9d1af89f";
+    private static class TestData {
+        static final String CORRELATION_ID = "b7700d43-35cd-4898-889f-998e9d1af89f";
 
-        String ALT_CORRELATION_ID_HEADER = "correlation-id";
+        static final String ALT_CORRELATION_ID_HEADER = "correlation-id";
     }
 
     @Test
@@ -130,8 +131,10 @@ class CorrelationIdFilterTest {
 
     @Test
     void destroy_happyPath_doesNothing() {
+        final CorrelationIdFilter target = createDefaultFilter();
+
         // Just added for coverage :O(
-        createDefaultFilter().destroy();
+        assertDoesNotThrow(target::destroy);
     }
 
     private CorrelationIdFilter createDefaultFilter() {

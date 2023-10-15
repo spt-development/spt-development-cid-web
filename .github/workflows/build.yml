@@ -7,19 +7,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up JDK 21
         uses: oracle-actions/setup-java@v1
         with:
           website: jdk.java.net
           release: 21
-
-      - name: Build with Maven
-        run: mvn clean install -B
-
-      - name: Mutation testing
-        run: mvn org.pitest:pitest-maven:mutationCoverage -B
+      - run: ./mvnw clean install -Pall-quality-gates -B
 
   release:
     runs-on: ubuntu-latest
@@ -27,7 +25,10 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up JDK 21
         uses: oracle-actions/setup-java@v1
@@ -36,7 +37,7 @@ jobs:
           release: 21
           
       - name: Determine version
-        run: echo "POM_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec | sed -e 's/-SNAPSHOT//')" >> $GITHUB_ENV
+        run: echo "POM_VERSION=$(./mvnw -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec | sed -e 's/-SNAPSHOT//')" >> $GITHUB_ENV
 
       - name: Import GPG key
         id: import_gpg
@@ -51,7 +52,7 @@ jobs:
           git config user.name "GitHub Actions"
 
       - name: Create release
-        run: mvn --settings .github/maven-settings.xml release:prepare release:perform -DskipTests -Prelease -B
+        run: ./mvnw --settings .github/maven-settings.xml release:prepare release:perform -DskipTests -Prelease -B
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
@@ -67,3 +68,4 @@ jobs:
           tag: ${{ env.POM_VERSION }}
           artifacts: target/spt-development-cid-web-${{ env.POM_VERSION }}.jar
           artifactContentType: application/java-archive
+          bodyFile: documentation/releases/release-${{ env.POM_VERSION }}.md

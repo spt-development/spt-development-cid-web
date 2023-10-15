@@ -76,7 +76,7 @@ public class CorrelationIdFilter implements Filter {
         assert servletRequest instanceof HttpServletRequest;
         assert servletResponse instanceof HttpServletResponse;
 
-        initializeCorrelationId((HttpServletRequest)servletRequest, (HttpServletResponse)servletResponse);
+        initializeCorrelationId((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
