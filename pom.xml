@@ -31,8 +31,11 @@
 
         <maven.compiler.release>17</maven.compiler.release>
 
+        <!-- Maven version -->
+        <maven.min.version>3.9.4</maven.min.version>
+
         <!-- Dependency versions -->
-        <spt-cid.version>2.0.11</spt-cid.version>
+        <spt-cid.version>2.0.12</spt-cid.version>
 
         <!-- Dependency versions, matched to Spring Boot -->
         <jakarta-servlet.version>6.0.0</jakarta-servlet.version>
@@ -45,26 +48,31 @@
         <mockito.version>5.3.1</mockito.version>
 
         <!-- Plugin versions -->
+        <build-helper-maven-plugin.version>3.4.0</build-helper-maven-plugin.version>
         <checkstyle-maven-plugin.version>3.3.0</checkstyle-maven-plugin.version>
-        <findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
-        <findbugs-sec-bug-pattern.version>1.12.0</findbugs-sec-bug-pattern.version>
-        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+        <dependency-check-maven.version>8.4.1</dependency-check-maven.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+        <license-maven-plugin.version>2.2.0</license-maven-plugin.version>
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version>
         <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
-        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
+        <maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
+        <maven-jxr-plugin.version>3.3.0</maven-jxr-plugin.version>
+        <maven-pmd-plugin.version>3.21.0</maven-pmd-plugin.version>
         <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
-        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-scm-plugin.version>2.0.1</maven-scm-plugin.version>
+        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
         <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
         <nexus-staging-plugin.version>1.6.13</nexus-staging-plugin.version>
-        <pitest-maven.version>1.15.0</pitest-maven.version>
+        <pitest-maven.version>1.15.1</pitest-maven.version>
         <spotbugs.version>4.7.3.6</spotbugs.version>
         <versions-maven-plugin.version>2.16.1</versions-maven-plugin.version>
 
         <!-- Plugin dependencies -->
-        <asm.version>9.5</asm.version>
-        <checkstyle.version>10.12.3</checkstyle.version>
+        <findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
+        <findbugs-sec-bug-pattern.version>1.12.0</findbugs-sec-bug-pattern.version>
+        <checkstyle.version>10.12.4</checkstyle.version>
         <maven-dependency-analyzer.version>1.13.2</maven-dependency-analyzer.version>
         <pitest-junit5-plugin.version>1.2.0</pitest-junit5-plugin.version>
     </properties>
@@ -145,7 +153,64 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Plugins used in custom profiles, added so that new versions are detected by the versions plugin -->
+                <plugin>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${maven-gpg-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>${maven-pmd-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>${license-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.pitest</groupId>
+                    <artifactId>pitest-maven</artifactId>
+                    <version>${pitest-maven.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.pitest</groupId>
+                            <artifactId>pitest-junit5-plugin</artifactId>
+                            <version>${pitest-junit5-plugin.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>${nexus-staging-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build-helper-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>parse-version</id>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
@@ -153,6 +218,7 @@
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
                         <arg>-Xlint:all</arg>
+                        <arg>-Xlint:-processing</arg>
                         <arg>-Werror</arg>
                     </compilerArgs>
                 </configuration>
@@ -160,20 +226,6 @@
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>${maven-dependency-plugin.version}</version>
-                <dependencies>
-                    <!-- Overriding the default analyzer version, to support JDK 11+ -->
-                    <dependency>
-                        <groupId>org.apache.maven.shared</groupId>
-                        <artifactId>maven-dependency-analyzer</artifactId>
-                        <version>${maven-dependency-analyzer.version}</version>
-                    </dependency>
-                    <!-- Overriding the default analyzer version, to support JDK 13 -->
-                    <dependency>
-                        <groupId>org.ow2.asm</groupId>
-                        <artifactId>asm</artifactId>
-                        <version>${asm.version}</version>
-                    </dependency>
-                </dependencies>
                 <executions>
                     <execution>
                         <id>analyze</id>
@@ -183,6 +235,7 @@
                         <configuration>
                             <failOnWarning>true</failOnWarning>
                             <ignoreNonCompile>true</ignoreNonCompile>
+                            <ignoreAllNonTestScoped>true</ignoreAllNonTestScoped>
                         </configuration>
                     </execution>
                 </executions>
@@ -200,6 +253,16 @@
                         <configuration>
                             <rules>
                                 <dependencyConvergence />
+                                <requireFilesExist>
+                                    <files>
+                                        <!-- Minimum set of documentation required -->
+                                        <file>${project.basedir}/README.md</file>
+                                        <file>${project.basedir}/documentation/releases/release-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.md</file>
+                                    </files>
+                                </requireFilesExist>
+                                <requireMavenVersion>
+                                    <version>${maven.min.version}</version>
+                                </requireMavenVersion>
                             </rules>
                         </configuration>
                     </execution>
@@ -216,56 +279,31 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <configLocation>spt_checks.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
-                    <linkXRef>false</linkXRef>
+                    <violationSeverity>warning</violationSeverity>
                 </configuration>
                 <executions>
                     <execution>
+                        <id>google-checks</id>
+                        <phase>validate</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
+                        <configuration>
+                            <configLocation>google_checks.xml</configLocation>
+                            <suppressionsLocation>config/checkstyle/google_checks_suppressions.xml</suppressionsLocation>
+                        </configuration>
                     </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${spotbugs.version}</version>
-                <dependencies>
-                    <!-- Overriding the default analyzer version, to support JDK 19 -->
-                    <dependency>
-                        <groupId>org.ow2.asm</groupId>
-                        <artifactId>asm</artifactId>
-                        <version>${asm.version}</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <effort>Max</effort>
-                    <threshold>Low</threshold>
-                    <xmlOutput>false</xmlOutput>
-                    <plugins>
-                        <plugin>
-                            <groupId>jp.skypencil.findbugs.slf4j</groupId>
-                            <artifactId>bug-pattern</artifactId>
-                            <version>${findbugs-slf4j-bug-pattern.version}</version>
-                        </plugin>
-                        <plugin>
-                            <groupId>com.h3xstream.findsecbugs</groupId>
-                            <artifactId>findsecbugs-plugin</artifactId>
-                            <version>${findbugs-sec-bug-pattern.version}</version>
-                        </plugin>
-                    </plugins>
-                    <excludeFilterFile>${project.basedir}/findbugs-exclude.xml</excludeFilterFile>
-                </configuration>
-                <executions>
                     <execution>
-                        <id>analyze-compile</id>
-                        <phase>compile</phase>
+                        <id>spt-checks</id>
+                        <phase>validate</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
+                        <configuration>
+                            <configLocation>config/checkstyle/spt_checks.xml</configLocation>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -282,6 +320,36 @@
                         <exclude>**/*IT.java</exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs.version}</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                    <xmlOutput>false</xmlOutput>
+                    <plugins>
+                        <plugin>
+                            <groupId>jp.skypencil.findbugs.slf4j</groupId>
+                            <artifactId>bug-pattern</artifactId>
+                            <version>${findbugs-slf4j-bug-pattern.version}</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>com.h3xstream.findsecbugs</groupId>
+                            <artifactId>findsecbugs-plugin</artifactId>
+                            <version>${findbugs-sec-bug-pattern.version}</version>
+                        </plugin>
+                    </plugins>
+                    <excludeFilterFile>${project.basedir}/config/findbugs/findbugs-exclude.xml</excludeFilterFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -316,6 +384,30 @@
                                             <minimum>1.0</minimum>
                                         </limit>
                                     </limits>
+                                    <excludes>
+                                        <!--
+                                             Any classes / packages excluded here, must have specific rules for them below,
+                                             with reasons.
+                                          -->
+                                        <exclude>com.spt.development.audit.spring.security.AuthenticationAdapterFactory</exclude>
+                                    </excludes>
+                                </rule>
+                                <rule>
+                                    <element>CLASS</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.82</minimum>
+                                        </limit>
+                                    </limits>
+                                    <includes>
+                                        <!--
+                                             Difficult to force the ClassNotFoundException when checking if authentication
+                                             object is an instance of OAuth2Authentication
+                                          -->
+                                        <include>com.spt.development.audit.spring.security.AuthenticationAdapterFactory</include>
+                                    </includes>
                                 </rule>
                             </rules>
                         </configuration>
@@ -323,18 +415,19 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>${pitest-maven.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.pitest</groupId>
-                        <artifactId>pitest-junit5-plugin</artifactId>
-                        <version>${pitest-junit5-plugin.version}</version>
-                    </dependency>
-                </dependencies>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${dependency-check-maven.version}</version>
                 <configuration>
-                    <mutationThreshold>100</mutationThreshold>
+                    <!-- Assembly analyzer disabled because we don't have any .NET code/dlls -->
+                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+                    <!-- Node and retirejs analyzer disabled, because any js floating around isn't part of the main app -->
+                    <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
+
+                    <failBuildOnCVSS>0</failBuildOnCVSS>
+                    <suppressionFiles>
+                        <suppressionFile>${project.basedir}/config/owasp/suppress.xml</suppressionFile>
+                    </suppressionFiles>
                 </configuration>
             </plugin>
             <plugin>
@@ -342,9 +435,13 @@
                 <artifactId>versions-maven-plugin</artifactId>
                 <configuration>
                     <outputFile>${project.build.directory}/dependency-versions.txt</outputFile>
-                    <rulesUri>file:///${project.basedir}/maven-version-rules.xml</rulesUri>
+                    <rulesUri>file:///${project.basedir}/config/versions/version-rules.xml</rulesUri>
                 </configuration>
                 <version>${versions-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>${maven-scm-plugin.version}</version>
             </plugin>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
@@ -365,19 +462,147 @@
 
     <profiles>
         <profile>
-            <id>release</id>
+            <!-- Additional quality gates not run by default when executing mvn clean verify, but are run by CI pipeline -->
+            <id>all-quality-gates</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <configuration>
+                            <mutationThreshold>100</mutationThreshold>
+                            <excludedClasses>
+                                <param>com.spt.development.audit.spring.security.AuthenticationAdapterFactory</param>
+                            </excludedClasses>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>mutation-testing</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>mutationCoverage</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <!-- Version defined in pluginManagement section -->
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <configuration>
+                            <includeTests>false</includeTests>
+                            <printFailingErrors>true</printFailingErrors>
+                            <rulesets>
+                                <ruleset>config/pmd/rulesets/spt-default-rules.xml</ruleset>
+                                <ruleset>config/pmd/rulesets/spt-main-rules.xml</ruleset>
+                            </rulesets>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>pmd-main-check</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>pmd-test-check</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>pmd</goal>
+                                    <goal>check</goal>
+                                </goals>
+                                <configuration>
+                                    <targetDirectory>${project.build.directory}/pmdTest/</targetDirectory>
+                                    <includeTests>true</includeTests>
+                                    <excludeRoots>
+                                        <excludeRoot>${basedir}/src/main/java</excludeRoot>
+                                    </excludeRoots>
+                                    <rulesets>
+                                        <ruleset>config/pmd/rulesets/spt-default-rules.xml</ruleset>
+                                        <ruleset>config/pmd/rulesets/spt-test-rules.xml</ruleset>
+                                    </rulesets>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>cpd-check</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>cpd-check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <!-- Version defined in pluginManagement section -->
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>add-third-party</goal>
+                                </goals>
+                                <configuration>
+                                    <failOnBlacklist>true</failOnBlacklist>
+                                    <licenseMerges>
+                                        <!-- Aggregate different ways to write acceptable licenses -->
+                                        <licenseMerge>CC0 1.0 Universal (CC0 1.0) Public Domain Dedication|
+                                            Public Domain, per Creative Commons CC0
+                                        </licenseMerge>
+                                        <licenseMerge>Eclipse Distribution License - v1.0|
+                                            Eclipse Distribution License - v 1.0
+                                        </licenseMerge>
+                                        <licenseMerge>Eclipse Public License - v1.0|
+                                            Eclipse Public License 1.0|Eclipse Public License - v 1.0|EDL 1.0
+                                        </licenseMerge>
+                                        <licenseMerge>Eclipse Public License - v2.0|
+                                            Eclipse Public License 2.0|Eclipse Public License v2.0|EPL 2.0|
+                                            Eclipse Public License - v 2.0
+                                        </licenseMerge>
+                                        <licenseMerge>The 2-Clause BSD License|BSD-2-Clause
+                                        </licenseMerge>
+                                        <licenseMerge>The 3-Clause BSD License|BSD License 3|BSD-3-Clause
+                                        </licenseMerge>
+                                        <licenseMerge>The Apache Software License, Version 2.0|Apache2|
+                                            Apache-2.0|Apache 2|APL2|Apache 2.0|Apache License, Version 2.0|
+                                            The Apache License, Version 2.0|Apache Software License - Version 2.0|
+                                            the Apache License, ASL Version 2.0|ASL 2.0|Apache License 2.0|ASL, version 2
+                                        </licenseMerge>
+                                        <licenseMerge>The MIT License|
+                                            MIT license|The MIT License (MIT)|MIT License|MIT|MIT-style
+                                        </licenseMerge>
+                                    </licenseMerges>
+                                    <includedLicenses>
+                                        <!-- To get an idea of risk, see - https://www.synopsys.com/blogs/software-security/top-open-source-licenses/ -->
+                                        <includedLicense>CC0 1.0 Universal (CC0 1.0) Public Domain Dedication</includedLicense>
+                                        <includedLicense>Eclipse Distribution License - v1.0</includedLicense>
+                                        <includedLicense>Eclipse Public License - v1.0</includedLicense>
+                                        <includedLicense>Eclipse Public License - v2.0</includedLicense>
+                                        <includedLicense>The 2-Clause BSD License</includedLicense>
+                                        <includedLicense>The 3-Clause BSD License</includedLicense>
+                                        <includedLicense>The Apache Software License, Version 2.0</includedLicense>
+                                        <includedLicense>The MIT License</includedLicense>
+                                    </includedLicenses>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <!-- Version defined in pluginManagement section -->
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
+        <profile>
+            <id>release</id>
             <activation>
                 <property>
                     <name>release</name>
                 </property>
             </activation>
-
             <build>
                 <plugins>
                     <plugin>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -386,10 +611,10 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <!-- Version defined in pluginManagement section -->
                     </plugin>
                     <plugin>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -398,10 +623,10 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <!-- Version defined in pluginManagement section -->
                     </plugin>
                     <plugin>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -411,22 +636,32 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <!-- Version defined in pluginManagement section -->
                     </plugin>
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>${nexus-staging-plugin.version}</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
+                        <!-- Version defined in pluginManagement section -->
                     </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${maven-jxr-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </reporting>
 
     <developers>
         <developer>

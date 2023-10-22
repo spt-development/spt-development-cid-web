@@ -7,10 +7,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class HttpHeaderUtilsTest {
-    private interface TestData {
-        String FIRST_PART = "first part";
-        String SECOND_PART = "second part";
-        String BOTH_PARTS = FIRST_PART + SECOND_PART;
+    private static class TestData {
+        static final String FIRST_PART = "first part";
+        static final String SECOND_PART = "second part";
+        static final String BOTH_PARTS = FIRST_PART + SECOND_PART;
     }
 
     @Test

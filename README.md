@@ -62,7 +62,7 @@ Building locally
 To build the library, run the following maven command:
 
 ```shell
-$ mvn clean install
+$ ./mvnw clean install
 ```
 
 Release
