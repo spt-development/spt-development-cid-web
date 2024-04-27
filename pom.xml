@@ -39,7 +39,7 @@
 
         <!-- Dependency versions, matched to Spring Boot -->
         <jakarta-servlet.version>6.0.0</jakarta-servlet.version>
-        <slf4j.version>2.0.12</slf4j.version>
+        <slf4j.version>2.0.13</slf4j.version>
 
         <!-- Test dependency versions, matched to Spring Boot -->
         <hamcrest.version>2.2</hamcrest.version>
@@ -50,30 +50,31 @@
         <!-- Plugin versions -->
         <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
         <checkstyle-maven-plugin.version>3.3.1</checkstyle-maven-plugin.version>
-        <dependency-check-maven.version>9.0.10</dependency-check-maven.version>
-        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+        <dependency-check-maven.version>9.1.0</dependency-check-maven.version>
+        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <license-maven-plugin.version>2.4.0</license-maven-plugin.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-dependency-plugin.version>3.6.1</maven-dependency-plugin.version>
         <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
-        <maven-gpg-plugin.version>3.2.1</maven-gpg-plugin.version>
+        <maven-gpg-plugin.version>3.2.4</maven-gpg-plugin.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
         <maven-jxr-plugin.version>3.3.2</maven-jxr-plugin.version>
-        <maven-pmd-plugin.version>3.21.2</maven-pmd-plugin.version>
+        <maven-pmd-plugin.version>3.22.0</maven-pmd-plugin.version>
         <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
-        <maven-scm-plugin.version>2.0.1</maven-scm-plugin.version>
-        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+        <maven-scm-plugin.version>2.1.0</maven-scm-plugin.version>
+        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <nexus-staging-plugin.version>1.6.13</nexus-staging-plugin.version>
-        <pitest-maven.version>1.15.8</pitest-maven.version>
-        <spotbugs.version>4.8.3.1</spotbugs.version>
+        <pitest-maven.version>1.16.0</pitest-maven.version>
+        <spotbugs.version>4.8.4.0</spotbugs.version>
         <versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
 
         <!-- Plugin dependencies -->
-        <checkstyle.version>10.14.2</checkstyle.version>
+        <checkstyle.version>10.15.0</checkstyle.version>
         <findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
         <findbugs-sec-bug-pattern.version>1.12.0</findbugs-sec-bug-pattern.version>
         <pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
+        <pmd.version>7.1.0</pmd.version>
     </properties>
 
     <dependencyManagement>
@@ -166,6 +167,28 @@
                 <plugin>
                     <artifactId>maven-pmd-plugin</artifactId>
                     <version>${maven-pmd-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>net.sourceforge.pmd</groupId>
+                            <artifactId>pmd-core</artifactId>
+                            <version>${pmd.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>net.sourceforge.pmd</groupId>
+                            <artifactId>pmd-java</artifactId>
+                            <version>${pmd.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>net.sourceforge.pmd</groupId>
+                            <artifactId>pmd-javascript</artifactId>
+                            <version>${pmd.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>net.sourceforge.pmd</groupId>
+                            <artifactId>pmd-jsp</artifactId>
+                            <version>${pmd.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <artifactId>maven-source-plugin</artifactId>
@@ -383,30 +406,6 @@
                                             <minimum>1.0</minimum>
                                         </limit>
                                     </limits>
-                                    <excludes>
-                                        <!--
-                                             Any classes / packages excluded here, must have specific rules for them below,
-                                             with reasons.
-                                          -->
-                                        <exclude>com.spt.development.audit.spring.security.AuthenticationAdapterFactory</exclude>
-                                    </excludes>
-                                </rule>
-                                <rule>
-                                    <element>CLASS</element>
-                                    <limits>
-                                        <limit>
-                                            <counter>LINE</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.82</minimum>
-                                        </limit>
-                                    </limits>
-                                    <includes>
-                                        <!--
-                                             Difficult to force the ClassNotFoundException when checking if authentication
-                                             object is an instance of OAuth2Authentication
-                                          -->
-                                        <include>com.spt.development.audit.spring.security.AuthenticationAdapterFactory</include>
-                                    </includes>
                                 </rule>
                             </rules>
                         </configuration>

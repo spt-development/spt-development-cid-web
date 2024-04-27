@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class HttpHeaderUtilsTest {
-    private static class TestData {
+    private static final class TestData {
         static final String FIRST_PART = "first part";
         static final String SECOND_PART = "second part";
         static final String BOTH_PARTS = FIRST_PART + SECOND_PART;

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class CorrelationIdFilterTest {
-    private static class TestData {
+    private static final class TestData {
         static final String CORRELATION_ID = "b7700d43-35cd-4898-889f-998e9d1af89f";
 
         static final String ALT_CORRELATION_ID_HEADER = "correlation-id";

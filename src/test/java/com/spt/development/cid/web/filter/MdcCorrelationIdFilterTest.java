@@ -19,7 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 class MdcCorrelationIdFilterTest {
-    private static class TestData {
+    private static final class TestData {
         static final String CORRELATION_ID = "30fc1a7c-8fcf-4c10-bc59-094cee91c386";
 
         static final String ALT_MDC_CID_KEY = "test-correlation-id";
