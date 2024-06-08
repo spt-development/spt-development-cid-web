@@ -44,37 +44,43 @@
         <!-- Test dependency versions, matched to Spring Boot -->
         <hamcrest.version>2.2</hamcrest.version>
         <junit-jupiter.version>5.10.2</junit-jupiter.version>
-        <logback.version>1.4.14</logback.version>
-        <mockito.version>5.7.0</mockito.version>
+        <logback.version>1.5.6</logback.version>
+        <mockito.version>5.11.0</mockito.version>
+
+        <!-- Test dependency versions, matched to Spring Boot -->
+        <hamcrest.version>2.2</hamcrest.version>
+        <junit-jupiter.version>5.10.2</junit-jupiter.version>
+        <logback.version>1.5.6</logback.version>
+        <mockito.version>5.11.0</mockito.version>
 
         <!-- Plugin versions -->
-        <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
-        <checkstyle-maven-plugin.version>3.3.1</checkstyle-maven-plugin.version>
-        <dependency-check-maven.version>9.1.0</dependency-check-maven.version>
+        <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
+        <checkstyle-maven-plugin.version>3.4.0</checkstyle-maven-plugin.version>
+        <dependency-check-maven.version>9.2.0</dependency-check-maven.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <license-maven-plugin.version>2.4.0</license-maven-plugin.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-dependency-plugin.version>3.6.1</maven-dependency-plugin.version>
-        <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
+        <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>3.2.4</maven-gpg-plugin.version>
-        <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
-        <maven-jxr-plugin.version>3.3.2</maven-jxr-plugin.version>
+        <maven-javadoc-plugin.version>3.7.0</maven-javadoc-plugin.version>
+        <maven-jxr-plugin.version>3.4.0</maven-jxr-plugin.version>
         <maven-pmd-plugin.version>3.22.0</maven-pmd-plugin.version>
         <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
         <maven-scm-plugin.version>2.1.0</maven-scm-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
-        <nexus-staging-plugin.version>1.6.13</nexus-staging-plugin.version>
-        <pitest-maven.version>1.16.0</pitest-maven.version>
-        <spotbugs.version>4.8.4.0</spotbugs.version>
+        <nexus-staging-plugin.version>1.7.0</nexus-staging-plugin.version>
+        <pitest-maven.version>1.16.1</pitest-maven.version>
+        <spotbugs.version>4.8.5.0</spotbugs.version>
         <versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
 
         <!-- Plugin dependencies -->
-        <checkstyle.version>10.15.0</checkstyle.version>
+        <checkstyle.version>10.17.0</checkstyle.version>
         <findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
         <findbugs-sec-bug-pattern.version>1.12.0</findbugs-sec-bug-pattern.version>
         <pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
-        <pmd.version>7.1.0</pmd.version>
+        <pmd.version>7.2.0</pmd.version>
     </properties>
 
     <dependencyManagement>
