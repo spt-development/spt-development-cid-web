@@ -35,7 +35,7 @@
         <maven.min.version>3.9.4</maven.min.version>
 
         <!-- Dependency versions -->
-        <spt-cid.version>2.0.14</spt-cid.version>
+        <spt-cid.version>2.0.15</spt-cid.version>
 
         <!-- Dependency versions, matched to Spring Boot -->
         <jakarta-servlet.version>6.0.0</jakarta-servlet.version>
@@ -43,38 +43,38 @@
 
         <!-- Test dependency versions, matched to Spring Boot -->
         <hamcrest.version>2.2</hamcrest.version>
-        <junit-jupiter.version>5.10.3</junit-jupiter.version>
+        <junit-jupiter.version>5.10.5</junit-jupiter.version>
         <logback.version>1.5.8</logback.version>
         <mockito.version>5.11.0</mockito.version>
 
         <!-- Plugin versions -->
         <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
-        <checkstyle-maven-plugin.version>3.5.0</checkstyle-maven-plugin.version>
-        <dependency-check-maven.version>10.0.4</dependency-check-maven.version>
+        <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
+        <dependency-check-maven.version>11.1.0</dependency-check-maven.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <license-maven-plugin.version>2.4.0</license-maven-plugin.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
-        <maven-dependency-plugin.version>3.8.0</maven-dependency-plugin.version>
+        <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
-        <maven-gpg-plugin.version>3.2.6</maven-gpg-plugin.version>
-        <maven-javadoc-plugin.version>3.10.0</maven-javadoc-plugin.version>
-        <maven-jxr-plugin.version>3.5.0</maven-jxr-plugin.version>
-        <maven-pmd-plugin.version>3.25.0</maven-pmd-plugin.version>
+        <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
+        <maven-javadoc-plugin.version>3.10.1</maven-javadoc-plugin.version>
+        <maven-jxr-plugin.version>3.6.0</maven-jxr-plugin.version>
+        <maven-pmd-plugin.version>3.26.0</maven-pmd-plugin.version>
         <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
         <maven-scm-plugin.version>2.1.0</maven-scm-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.5.0</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.5.1</maven-surefire-plugin.version>
         <nexus-staging-plugin.version>1.7.0</nexus-staging-plugin.version>
         <pitest-maven.version>1.17.0</pitest-maven.version>
-        <spotbugs.version>4.8.6.4</spotbugs.version>
+        <spotbugs.version>4.8.6.5</spotbugs.version>
         <versions-maven-plugin.version>2.17.1</versions-maven-plugin.version>
 
         <!-- Plugin dependencies -->
-        <checkstyle.version>10.18.1</checkstyle.version>
+        <checkstyle.version>10.20.0</checkstyle.version>
         <findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
-        <findbugs-sec-bug-pattern.version>1.12.0</findbugs-sec-bug-pattern.version>
+        <findbugs-sec-bug-pattern.version>1.13.0</findbugs-sec-bug-pattern.version>
         <pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
-        <pmd.version>7.5.0</pmd.version>
+        <pmd.version>7.7.0</pmd.version>
     </properties>
 
     <dependencyManagement>
@@ -333,6 +333,17 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
+                    <!--
+                        Prevents the following warning introduced in JDK 21, caused by Mockito or more specifically byte-buddy-agent:
+
+                        WARNING: A Java agent has been loaded dynamically (/Users/khm/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.5/byte-buddy-agent-1.14.5.jar)
+                        WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+                        WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+                        WARNING: Dynamic loading of agents will be disallowed by default in a future release
+
+                        NOTE. argLine property is set by JaCoCo in prepare-agent stage.
+                     -->
+                    <argLine>-XX:+EnableDynamicAgentLoading ${argLine}</argLine>
                     <trimStackTrace>false</trimStackTrace>
                     <includes>
                         <include>**/*Tests.java</include>
@@ -347,6 +358,19 @@
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>${spotbugs.version}</version>
+                <dependencies>
+                    <!-- Included as dependencies as well as plugins so that versions plugins picks up new versions -->
+                    <dependency>
+                        <groupId>jp.skypencil.findbugs.slf4j</groupId>
+                        <artifactId>bug-pattern</artifactId>
+                        <version>${findbugs-slf4j-bug-pattern.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.h3xstream.findsecbugs</groupId>
+                        <artifactId>findsecbugs-plugin</artifactId>
+                        <version>${findbugs-sec-bug-pattern.version}</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Low</threshold>
