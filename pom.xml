@@ -43,9 +43,9 @@
 
         <!-- Test dependency versions, matched to Spring Boot -->
         <hamcrest.version>2.2</hamcrest.version>
-        <junit-jupiter.version>5.10.5</junit-jupiter.version>
-        <logback.version>1.5.8</logback.version>
-        <mockito.version>5.11.0</mockito.version>
+        <junit-jupiter.version>5.11.3</junit-jupiter.version>
+        <logback.version>1.5.12</logback.version>
+        <mockito.version>5.14.2</mockito.version>
 
         <!-- Plugin versions -->
         <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
@@ -57,20 +57,20 @@
         <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
-        <maven-javadoc-plugin.version>3.10.1</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.11.1</maven-javadoc-plugin.version>
         <maven-jxr-plugin.version>3.6.0</maven-jxr-plugin.version>
         <maven-pmd-plugin.version>3.26.0</maven-pmd-plugin.version>
         <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
         <maven-scm-plugin.version>2.1.0</maven-scm-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.5.1</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <nexus-staging-plugin.version>1.7.0</nexus-staging-plugin.version>
-        <pitest-maven.version>1.17.0</pitest-maven.version>
-        <spotbugs.version>4.8.6.5</spotbugs.version>
-        <versions-maven-plugin.version>2.17.1</versions-maven-plugin.version>
+        <pitest-maven.version>1.17.1</pitest-maven.version>
+        <spotbugs.version>4.8.6.6</spotbugs.version>
+        <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
 
         <!-- Plugin dependencies -->
-        <checkstyle.version>10.20.0</checkstyle.version>
+        <checkstyle.version>10.20.1</checkstyle.version>
         <findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
         <findbugs-sec-bug-pattern.version>1.13.0</findbugs-sec-bug-pattern.version>
         <pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
@@ -260,6 +260,12 @@
                             <ignoreAllNonTestScoped>true</ignoreAllNonTestScoped>
                         </configuration>
                     </execution>
+                    <!-- Required for Mockito as of JDK 21 - see `maven-surefire-plugin` configuration for more information. -->
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -342,8 +348,17 @@
                         WARNING: Dynamic loading of agents will be disallowed by default in a future release
 
                         NOTE. argLine property is set by JaCoCo in prepare-agent stage.
+
+                        Starting from Java 21, the JDK restricts the ability of libraries to attach a Java agent to their own JVM. As a result, the inline-mock-maker might not be
+                        able to function without an explicit setup to enable instrumentation, and the JVM will always display a warning.
+
+                        To explicitly attach Mockito during test execution, the library's jar file needs to be specified as -javaagent as an argument to the executing JVM with
+
+                        @{argLine} -javaagent:${org.mockito:mockito-core:jar}
+
+                        Additionally, the `properties` goal of the `maven-dependency-plugin` must be executed.
                      -->
-                    <argLine>-XX:+EnableDynamicAgentLoading ${argLine}</argLine>
+                    <argLine>-XX:+EnableDynamicAgentLoading @{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
                     <trimStackTrace>false</trimStackTrace>
                     <includes>
                         <include>**/*Tests.java</include>
@@ -359,6 +374,23 @@
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>${spotbugs.version}</version>
                 <dependencies>
+                    <!--
+                         Added slf4j dependencies to resolve warning:
+
+                         SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+                         ...
+                      -->
+                    <dependency>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                        <version>${slf4j.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                        <version>${slf4j.version}</version>
+                    </dependency>
+
                     <!-- Included as dependencies as well as plugins so that versions plugins picks up new versions -->
                     <dependency>
                         <groupId>jp.skypencil.findbugs.slf4j</groupId>
