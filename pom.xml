@@ -689,7 +689,6 @@
                         <configuration>
                             <publishingServerId>central</publishingServerId>
                             <autoPublish>true</autoPublish>
-                            <waitUntil>published</waitUntil>
                         </configuration>
                         <!-- Version defined in pluginManagement section -->
                     </plugin>
