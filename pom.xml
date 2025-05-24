@@ -42,13 +42,14 @@
         <slf4j.version>2.0.17</slf4j.version>
 
         <!-- Test dependency versions, matched to Spring Boot -->
-        <hamcrest.version>2.2</hamcrest.version>
-        <junit-jupiter.version>5.11.4</junit-jupiter.version>
+        <hamcrest.version>3.0</hamcrest.version>
+        <junit-jupiter.version>5.12.1</junit-jupiter.version>
         <logback.version>1.5.18</logback.version>
-        <mockito.version>5.14.2</mockito.version>
+        <mockito.version>5.17.0</mockito.version>
 
         <!-- Plugin versions -->
         <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
+        <central-publishing-plugin.version>0.7.0</central-publishing-plugin.version>
         <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
         <dependency-check-maven.version>12.1.1</dependency-check-maven.version>
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
@@ -64,16 +65,15 @@
         <maven-scm-plugin.version>2.1.0</maven-scm-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
-        <nexus-staging-plugin.version>1.7.0</nexus-staging-plugin.version>
-        <pitest-maven.version>1.19.1</pitest-maven.version>
+        <pitest-maven.version>1.19.4</pitest-maven.version>
         <spotbugs.version>4.9.3.0</spotbugs.version>
         <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
 
         <!-- Plugin dependencies -->
-        <checkstyle.version>10.23.1</checkstyle.version>
+        <checkstyle.version>10.24.0</checkstyle.version>
         <findbugs-slf4j-bug-pattern.version>1.5.0</findbugs-slf4j-bug-pattern.version>
         <findbugs-sec-bug-pattern.version>1.14.0</findbugs-sec-bug-pattern.version>
-        <pitest-junit5-plugin.version>1.2.2</pitest-junit5-plugin.version>
+        <pitest-junit5-plugin.version>1.2.3</pitest-junit5-plugin.version>
         <pmd.version>7.13.0</pmd.version>
     </properties>
 
@@ -212,9 +212,9 @@
                     </dependencies>
                 </plugin>
                 <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>${nexus-staging-plugin.version}</version>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>${central-publishing-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -683,13 +683,13 @@
                         <!-- Version defined in pluginManagement section -->
                     </plugin>
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
                         </configuration>
                         <!-- Version defined in pluginManagement section -->
                     </plugin>
@@ -720,13 +720,5 @@
             <id>github</id>
             <url>https://github.com/spt-development/spt-development-cid-web</url>
         </site>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
     </distributionManagement>
 </project>
